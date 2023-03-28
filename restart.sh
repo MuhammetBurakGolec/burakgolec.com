@@ -24,14 +24,6 @@ sudo docker system prune -a
 sudo systemctl restart nginx
 
 sleep 4
-# Get nginx status summary
-status=$(curl -s http://localhost/nginx_status)
-
-# Parse the status information
-active=$(echo "$status" | grep 'Active' | awk '{print $NF}')
-reading=$(echo "$status" | grep 'Reading' | awk '{print $2}')
-writing=$(echo "$status" | grep 'Writing' | awk '{print $4}')
-waiting=$(echo "$status" | grep 'Waiting' | awk '{print $6}')
 
 # CPU yüzdesi
 cpu_usage=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1"%"}')
@@ -43,13 +35,8 @@ load=$(cat /proc/loadavg | awk '{print $1", "$2", "$3}')
 memory_used=$(free -m | awk 'NR==2{printf "%.2f%%", $3*100/$2 }')
 
 # Print the summary
-
-echo "Nginx status summary"
-echo "Active connections: $active"
-echo "Reading: $reading"
-echo "Writing: $writing"
-echo "Waiting: $waiting"
-echo ""
+echo $(sudo systemctl status nginx)
+echo " "
 echo "Server status summary"
 echo "CPU kullanımı: $cpu_usage"
 echo "Yük: $load"
