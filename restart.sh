@@ -23,6 +23,7 @@ sudo docker system prune -a
 # Restart nginx
 sudo systemctl restart nginx
 
+sleep 4
 # Get nginx status summary
 status=$(curl -s http://localhost/nginx_status)
 
@@ -42,6 +43,7 @@ load=$(cat /proc/loadavg | awk '{print $1", "$2", "$3}')
 memory_used=$(free -m | awk 'NR==2{printf "%.2f%%", $3*100/$2 }')
 
 # Print the summary
+
 echo "Nginx status summary"
 echo "Active connections: $active"
 echo "Reading: $reading"
